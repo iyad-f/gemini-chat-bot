@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
+import Markdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { dracula } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface ChatMessageProps {
   message: string;
@@ -23,16 +23,16 @@ export default function ChatMessage({ message, isUser, isDarkMode }: ChatMessage
             : 'bg-gray-200 text-gray-900'
         }`}
       >
-        <ReactMarkdown
+        <Markdown
           components={{
-            code({ node, inline, className, children, ...props }) {
+            code({ node, className, children, ...props }) {
               const match = /language-(\w+)/.exec(className || '');
-              return !inline && match ? (
+              return match ? (
                 <SyntaxHighlighter
-                  style={dracula}
+                  style={dracula as any}
                   language={match[1]}
                   PreTag="div"
-                  {...props}
+                  {...(props as any)}
                 >
                   {String(children).replace(/\n$/, '')}
                 </SyntaxHighlighter>
@@ -45,7 +45,7 @@ export default function ChatMessage({ message, isUser, isDarkMode }: ChatMessage
           }}
         >
           {message}
-        </ReactMarkdown>
+        </Markdown>
       </div>
     </div>
   );
